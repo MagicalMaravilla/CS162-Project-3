@@ -1,0 +1,74 @@
+import tkinter as tk
+from tkinter import simpledialog, messagebox
+from HomeSecurityPassword import SecurePasswordSystem
+
+
+
+class SecurePasswordSystemGUI(tk.Tk):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.title("Secure Password System")
+        self.geometry("500x500")
+
+        self.system = SecurePasswordSystem()
+        self.create_widgets()
+
+        def create_widgets(self):
+            btn_display_info = tk.Button(self, text="Display User Info", command=self.display_info)
+            btn_display_info.pack(pady=10)
+
+            btn_reset_username = tk.Button(self, text="Reset Username", command=self.reset_username)
+            btn_reset_username.pack(pady=10)
+
+            btn_set_guest_access = tk.Button(self, text="Set Guest Access", command=self.set_guest_access)
+            btn_set_guest_access.pack(pady=10)
+
+            btn_verify_guest_access = tk.Button(self, text="Verify Guest Access", command=self.verify_guest_access)
+            btn_verify_guest_access.pack(pady=10)
+
+            btn_owner_override = tk.Button(self, text="Owner Override", command=self.owner_override)
+            btn_owner_override.pack(pady=10)
+
+            btn_set_guest_password = tk.Button(self, text="Set Guest Password", command=self.set_guest_password)
+            btn_set_guest_password.pack(pady=10)
+
+            btn_guest_feature = tk.Button(self, text="Guest Feature", command=self.guest_feature)
+            btn_guest_feature.pack(pady=10)
+
+            btn_set_initial_username = tk.Button(self, text="Set Initial Username", command=self.set_initial_username)
+            btn_set_initial_username.pack(pady=10)
+
+            btn_verify_password = tk.Button(self, text="Verify Password", command=self.verify_password)
+            btn_verify_password.pack(pady=10)
+
+            btn_reset_password = tk.Button(self, text="Reset Password", command=self.reset_password)
+            btn_reset_password.pack(pady=10)
+
+            btn_exit = tk.Button(self, text="Exit", command=self.quit)
+            btn_exit.pack(pady=10)
+
+        def display_info(self):
+            info = f"Username: {self.system.username}\n"
+            info += f"Password: {'*' * len(self.system.password)} (Masked for security)\n"
+            messagebox.showinfo("User Info", info)
+
+        def reset_username(self):
+            confirmation = messagebox.askyesno("Confirmation", "Are you sure you want to reset your username?")
+            if not confirmation:
+                return
+
+            current_password = simpledialog.askstring("Password Verification", "Enter your current password:", show='*')
+            if current_password != self.system.password:
+                messagebox.showerror("Error", "Incorrect password. Username reset cancelled.")
+                return
+
+            new_username = simpledialog.askstring("Success", "Username updated successfully!")
+            if new_username:
+                self.system.username = new_username
+                messagebox.showinfo("Success", "Username updated successfully!")
+            else:
+                messagebox.showwarning("Warning", "Username not updated. Input was empty or cancelled.")
+
+if __name__ == "__main__":
+    app = SecurePasswordSystemGUI()
+    app.mainloop()
